@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Alternative Password Manager</string>
+	<key>Description</key>
+	<string>Creates a package out of the latest version of the KeepassXC dmg.</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.pkg.AppCleaner</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>AppCleaner</string>
+		<key>BUNDLE_ID</key>
+		<string>net.freemacsoft.AppCleaner</string>
+	</dict>
+	<key>MinimumVersion</key>
+    <string>1.0.0</string>
+    <key>ParentRecipe</key>
+    <string>com.github.jleggat.AppCleaner.download</string>
+    <key>Process</key>
+    <array>
+		<dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+			<key>Arguments</key>
+			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>AppPkgCreator</string>
+            <key>Arguments</key>
+            <dict>
+                <key>app_path</key>
+                <string>%RECIPE_CACHE_DIR%/AppCleaner.app</string>
+                <key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg</string>
+            </dict>
+        </dict>
+		<dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/downloads</string>
+				</array>
+			</dict>
+		</dict>
+    </array>
+</dict>
+</plist>

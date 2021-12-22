@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Alternative Password Manager</string>
+	<key>Description</key>
+	<string>Creates a package out of the latest version of the KeepassXC dmg.</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.pkg.KeePassXC</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>KeePassXC</string>
+		<key>BUNDLE_ID</key>
+		<string>org.keepassxc.keepassxc</string>
+	</dict>
+	<key>MinimumVersion</key>
+    <string>1.0.0</string>
+    <key>ParentRecipe</key>
+    <string>com.github.n8felton.download.KeePassXC</string>
+    <key>Process</key>
+    <array>
+		<dict>
+			<key>Processor</key>
+			<string>PkgRootCreator</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkgdirs</key>
+				<dict>
+					<key>Applications</key>
+					<string>0775</string>
+				</dict>
+				<key>pkgroot</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>PkgCreator</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pkg_request</key>
+                <dict>
+                    <key>pkgname</key>
+                    <string>%NAME%</string>
+                    <key>pkgdir</key>
+                    <string>%RECIPE_CACHE_DIR%/</string>
+                    <key>id</key>
+                    <string>%BUNDLE_ID%</string>
+                    <key>options</key>
+                    <string>purge_ds_store</string>
+					<key>version</key>
+					<string>%version%</string>
+                </dict>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>

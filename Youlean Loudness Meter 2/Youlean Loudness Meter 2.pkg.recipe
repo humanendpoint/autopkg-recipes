@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)</string>
+	<key>Description</key>
+	<string>Downloads the latest version of Commander One and creates a package.</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.pkg.Youlean Loudness Meter 2</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Youlean Loudness Meter 2</string>
+		<key>BUNDLE_ID</key>
+		<string>com.Youlean.standalone.Youlean-Loudness-Meter-2</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.dataJAR-recipes.download.Youlean Loudness Meter 2</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>Versioner</string>
+			<key>Arguments</key>
+			<dict>
+				<key>input_plist_path</key>
+				<string>%RECIPE_CACHE_DIR%/unzip/Youlean Loudness Meter 2 - V2.4.3 - macOS/Manual Install/%NAME%.app/Contents/info.plist</string>
+			</dict>
+		</dict>
+        <dict>
+			<key>Processor</key>
+			<string>PkgCopier</string>
+			<key>Arguments</key>
+			<dict>
+				<key>source_pkg</key>
+				<string>%found_filename%</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>PathDeleter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>path_list</key>
+				<array>
+					<string>%RECIPE_CACHE_DIR%/downloads</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
