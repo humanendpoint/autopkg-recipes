@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Downloads the latest version of sentry-cli. Options for arch: arm64, x86_64 and universal. If prereleases are to be included, set it to true or any non-empty value, like yes.</string>
+    <key>Identifier</key>
+    <string>com.github.symmtree.download.sentry-cli</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>Sentry-cli</string>
+        <key>ARCH</key>
+        <string>universal</string>
+        <key>PRERELEASE</key>
+        <string></string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>2.0.0</string>
+    <key>Process</key>
+    <array>
+		<dict>
+			<key>Processor</key>
+			<string>GitHubReleasesInfoProvider</string>
+			<key>Arguments</key>
+			<dict>
+				<key>github_repo</key>
+				<string>getsentry/sentry-cli</string>
+				<key>include_prereleases</key>
+				<string>%PRERELEASE%</string>
+                <key>asset_regex</key>
+                <string>sentry-cli-Darwin-%ARCH%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+            <key>filename</key>
+            <string>sentry-cli</string>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+    </array>
+</dict>
+</plist>
