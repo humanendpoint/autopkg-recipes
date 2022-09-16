@@ -23,7 +23,7 @@
             <key>description</key>
             <string>A command line utility to work with Sentry.</string>
             <key>category</key>
-            <string>
+            <string>Applications</string>
             <key>display_name</key>
             <string>Sentry-cli</string>
             <key>name</key>
