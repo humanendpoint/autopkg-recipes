@@ -5,9 +5,9 @@
 	<key>Comment</key>
 	<string>Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)</string>
 	<key>Description</key>
-	<string>Downloads the latest version of YT Music.</string>
+	<string>Downloads the latest version of YouTube Music.</string>
 	<key>Identifier</key>
-	<string>com.github.symmtree.download.YTMusic</string>
+	<string>com.github.catawiki.download.YouTubeMusic</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -20,17 +20,19 @@
 		<dict>
 			<key>Arguments</key>
 			<dict>
-				<key>appcast_url</key>
-				<string>https://raw.githubusercontent.com/steve228uk/YouTube-Music/master/Appcast.xml</string>
+				<key>asset_regex</key>
+				<string>.*\.dmg$</string>
+				<key>github_repo</key>
+				<string>th-ch/youtube-music</string>
 			</dict>
 			<key>Processor</key>
-			<string>SparkleUpdateInfoProvider</string>
+			<string>GitHubReleasesInfoProvider</string>
 		</dict>
 		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>filename</key>
-				<string>%NAME%-%version%.zip</string>
+				<string>%NAME%-%version%.dmg</string>
 			</dict>
 			<key>Processor</key>
 			<string>URLDownloader</string>
@@ -38,30 +40,6 @@
 		<dict>
 			<key>Processor</key>
 			<string>EndOfCheckPhase</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>archive_path</key>
-				<string>%pathname%</string>
-				<key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
-				<key>purge_destination</key>
-				<true/>
-			</dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>input_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%/YT Music.app</string>
-				<key>requirement</key>
-				<string>anchor apple generic and identifier "uk.co.wearecocoon.YT-Music" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = B598AEF9ZM)</string>
-			</dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
 		</dict>
 	</array>
 </dict>
