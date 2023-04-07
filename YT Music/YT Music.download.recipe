@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Downloads the latest version of YouTube Music.</string>
 	<key>Identifier</key>
-	<string>com.github.catawiki.download.YouTubeMusic</string>
+	<string>com.github.symmtree.download.YouTubeMusic</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
