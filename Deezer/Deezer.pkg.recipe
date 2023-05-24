@@ -23,6 +23,15 @@
 			<key>Processor</key>
 			<string>AppPkgCreator</string>
 		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/*.pkg</string>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>
