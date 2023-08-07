@@ -26,7 +26,7 @@
 				<string>https://www.deezer.com/desktop/download?platform=darwin&amp;architecture=x64</string>
 			</dict>
 			<key>Processor</key>
-			<string>com.github.catawiki.processors/URLPythonDownloader</string>
+			<string>URLDownloader</string>
 		</dict>
 		<dict>
 			<key>Processor</key>
