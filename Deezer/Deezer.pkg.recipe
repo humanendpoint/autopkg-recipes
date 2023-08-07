@@ -19,10 +19,37 @@
 	<string>com.github.symmtree.download.Deezer</string>
 	<key>Process</key>
 	<array>
-		<dict>
-			<key>Processor</key>
-			<string>AppPkgCreator</string>
-		</dict>
+	        <dict>
+	            <key>Processor</key>
+	            <string>PkgCreator</string>
+	            <key>Arguments</key>
+	            <dict>
+	                <key>pkg_request</key>
+	                <dict>
+	                    <key>pkgname</key>
+	                    <string>%NAME%-%version%</string>
+	                    <key>pkgdir</key>
+	                    <string>%RECIPE_CACHE_DIR%</string>
+	                    <key>id</key>
+	                    <string>com.deezer.deezer-desktop</string>
+	                    <key>resources</key>
+	                    <string>Resources</string>
+	                    <key>options</key>
+	                    <string>purge_ds_store</string>
+	                    <key>chown</key>
+	                    <array>
+	                        <dict>
+	                            <key>path</key>
+	                            <string>Applications</string>
+	                            <key>user</key>
+	                            <string>root</string>
+	                            <key>group</key>
+	                            <string>admin</string>
+	                        </dict>
+	                    </array>
+	                </dict>
+	            </dict>
+	        </dict>
 		<dict>
 			<key>Processor</key>
 			<string>FileFinder</string>
