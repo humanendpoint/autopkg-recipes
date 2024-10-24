@@ -1,0 +1,31 @@
+Description: Downloads the latest version of kubectl, creates a package, and imports the package into our Munki repo.
+Identifier: com.github.humanendpoint.munki.kubectl
+ParentRecipe: com.github.humanendpoint.sign.kubectl
+MinimumVersion: '1.1'
+
+Input:
+  NAME: kubectl
+  MUNKI_REPO_SUBDIR: apps/kubectl
+  pkginfo:
+    catalogs:
+    - production
+    description: The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. You can use kubectl to deploy applications, inspect and manage cluster resources, and view logs.
+    developer: Kubernetes
+    name: '%NAME%'
+    supported_architecture:
+    - arm64
+    unattended_install: true
+    unattended_uninstall: true
+
+Process:
+- Processor: MunkiInstallsItemsCreator
+  Arguments:
+    faux_root: '%RECIPE_CACHE_DIR%/pkgroot'
+    installs_item_paths:
+    - /usr/local/bin/kubectl
+
+- Processor: MunkiPkginfoMerger
+
+- Processor: MunkiImporter
+  Arguments:
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

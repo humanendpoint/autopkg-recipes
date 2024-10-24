@@ -1,0 +1,19 @@
+Description: Downloads the latest version of libtool.
+Identifier: com.github.humanendpoint.download.libtool
+MinimumVersion: '2.3'
+
+Input:
+  NAME: libtool
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"stable":"([^"]+)"'
+      url: https://formulae.brew.sh/api/formula/libtool.json
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://ftp.gnu.org/gnu/libtool/libtool-%version%.tar.gz'
+
+  - Processor: EndOfCheckPhase

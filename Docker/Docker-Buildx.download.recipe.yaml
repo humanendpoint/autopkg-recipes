@@ -1,0 +1,19 @@
+Description: Downloads the latest version of libyaml.
+Identifier: com.github.humanendpoint.download.docker-buildx
+MinimumVersion: '2.3'
+
+Input:
+  NAME: docker-buildx
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"stable":"([^"]+)"'
+      url: 'https://formulae.brew.sh/api/formula/%NAME%.json'
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://github.com/docker/buildx/releases/download/v%version%/buildx-v%version%.darwin-arm64'
+
+  - Processor: EndOfCheckPhase

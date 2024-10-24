@@ -1,0 +1,57 @@
+Description: Downloads the latest version of tilt.
+Identifier: com.github.humanendpoint.pkg.icu4c
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.icu4c
+
+Input:
+  NAME: icu4c
+
+Process:
+  - Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+    Arguments:
+      input_string: '%version%'
+      string_to_replace: 'release-'
+      replacement_string: ''
+
+  - Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+    Arguments:
+      input_string: '%output_string%'
+      string_to_replace: '-'
+      replacement_string: '.'
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%output_string%'
+      archive_format: tar_gzip
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%output_string%/icu/source'
+      alt_configure: './configure --disable-samples --disable-tests --enable-static'
+      alt_make_install: 'make install DESTDIR="%RECIPE_CACHE_DIR%/root"'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+          mode: '0755'
+        - group: staff
+          path: usr/local
+          user: root
+          mode: '0755'
+        id: com.git.icu4c
+        version: '%output_string%'
+        pkgname: 'icu4c-%output_string%'
+        pkgtype: flat
+        options: purge_ds_store

@@ -1,0 +1,25 @@
+Description: Downloads the latest version of libxml2.
+Identifier: com.github.humanendpoint.download.libxml2
+MinimumVersion: '2.3'
+
+Input:
+  NAME: libxml2
+
+Process:
+  - Processor: com.github.jgstew.SharedProcessors/URLTextSearcherArray
+    Arguments:
+      re_pattern: 'href="(\d+\.\d+)/"'
+      url: https://download.gnome.org/sources/libxml2/
+
+  - Processor: com.github.jgstew.SharedProcessors/VersionMaximumArray
+
+  - Processor: com.github.humanendpoint.processors/URLVersionSearcher
+    Arguments:
+      re_pattern: 'libxml2-(\d+\.\d+\.\d+)\.tar\.xz'
+      url: 'https://download.gnome.org/sources/libxml2/%version_maximum%'
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://download.gnome.org/sources/libxml2/%version_maximum%/libxml2-%version%.tar.xz'
+      filename: libxml2-%version%.tar.xz

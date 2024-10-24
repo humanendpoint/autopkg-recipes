@@ -1,0 +1,12 @@
+Description: Signs a provided installer package using a signing certificate identifier.
+Identifier: com.github.humanendpoint.sign.openssl
+ParentRecipe: com.github.humanendpoint.pkg.openssl
+
+Input:
+  SIGNINGCERTIFICATE: 'Developer ID Installer: Catawiki BV (XVNMP7V3Y4)'
+
+Process:
+- Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+  Arguments:
+    pkg_path: '%pkg_path%'
+    signing_cert: '%SIGNINGCERTIFICATE%'

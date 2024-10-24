@@ -1,0 +1,19 @@
+Description: Downloads the latest version of openssl.
+Identifier: com.github.humanendpoint.download.openssl
+MinimumVersion: '2.3'
+
+Input:
+  NAME: openssl
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '<a href="https://github\.com/openssl/openssl/releases/download/openssl-(\d+\.\d+\.\d+)/openssl-\1\.tar\.gz">'
+      url: https://www.openssl.org/source/
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://www.openssl.org/source/openssl-%version%.tar.gz'
+
+  - Processor: EndOfCheckPhase

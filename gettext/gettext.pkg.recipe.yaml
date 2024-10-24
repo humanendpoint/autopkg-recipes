@@ -1,0 +1,49 @@
+Description: Downloads the latest version of tilt.
+Identifier: com.github.humanendpoint.pkg.gettext
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.gettext
+
+Input:
+  NAME: gettext
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/package'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+      archive_format: tar_gzip
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --prefix="%RECIPE_CACHE_DIR%/root" --disable-java --without-git --disable-silent-rules --with-included-libunistring'
+      alt_make_install: 'make && make install DESTDIR="%RECIPE_CACHE_DIR%/root"'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/root%RECIPE_CACHE_DIR%/root'
+      destination_path: '%RECIPE_CACHE_DIR%/package/usr/local'
+      overwrite: True
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/package'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.humanendpoint.gettext
+        version: '%version%'
+        pkgname: 'gettext-%version%'
+        pkgtype: flat
+        options: purge_ds_store

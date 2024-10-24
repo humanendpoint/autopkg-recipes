@@ -1,0 +1,19 @@
+Description: Downloads the latest version of libgpg-error.
+Identifier: com.github.humanendpoint.download.libgpg-error
+MinimumVersion: '2.3'
+
+Input:
+  NAME: libgpg-error
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"stable":"([^"]+)"'
+      url: https://formulae.brew.sh/api/formula/libgpg-error.json
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-%version%.tar.bz2'
+
+  - Processor: EndOfCheckPhase

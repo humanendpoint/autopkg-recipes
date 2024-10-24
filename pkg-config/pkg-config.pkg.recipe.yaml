@@ -1,0 +1,58 @@
+Description: Downloads the latest version of tilt.
+Identifier: com.github.humanendpoint.pkg.pkg-config
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.pkg-config
+
+Input:
+  NAME: pkg-config
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+        usr/local/share: '0755'
+        usr/local/share/aclocal: '0755'
+        usr/local/share/doc: '0755'
+        usr/local/share/doc/pkg-config: '0755'
+        usr/local/share/man: '0755'
+        usr/local/share/man/man1: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/package'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+      archive_format: tar_gzip
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --disable-debug --disable-host-tool --with-internal-glib --prefix="%RECIPE_CACHE_DIR%/root"'
+      alt_make_install: 'make CFLAGS="-Wno-int-conversion" install DESTDIR="%RECIPE_CACHE_DIR%/root"'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/root%RECIPE_CACHE_DIR%/root'
+      destination_path: '%RECIPE_CACHE_DIR%/package/usr/local'
+      overwrite: True
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/package'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+          mode: '0755'
+        - group: staff
+          path: usr/local
+          user: root
+          mode: '0755'
+        id: com.humanendpoint.pkg-config
+        version: '%version%'
+        pkgname: 'pkg-config-%version%'
+        pkgtype: flat
+        options: purge_ds_store

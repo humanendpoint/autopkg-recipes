@@ -1,0 +1,24 @@
+Description: Downloads the latest version of readline.
+Identifier: com.github.humanendpoint.download.readline
+MinimumVersion: '2.3'
+
+Input:
+  NAME: readline
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"stable":"([^"]+)"'
+      url: https://formulae.brew.sh/api/formula/readline.json
+      result_output_var_name: version
+
+  - Processor: com.github.humanendpoint.processors/TrimVersion
+    Arguments:
+      version_string: '%version%'
+      url: https://formulae.brew.sh/api/formula/readline.json
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://ftp.gnu.org/gnu/readline/readline-%trimmed_version%.tar.gz'
+
+  - Processor: EndOfCheckPhase

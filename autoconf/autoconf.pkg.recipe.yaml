@@ -1,0 +1,42 @@
+Description: Packages the latest version of autoconf.
+Identifier: com.github.humanendpoint.pkg.autoconf
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.autoconf
+
+Input:
+  NAME: autoconf
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure'
+      alt_make_install: 'make install DESTDIR=root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.gnu.autoconf
+        version: '%version%'
+        pkgname: 'autoconf-%version%'
+        pkgtype: flat
+        options: purge_ds_store

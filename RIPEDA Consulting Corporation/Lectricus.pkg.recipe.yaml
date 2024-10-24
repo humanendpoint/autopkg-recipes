@@ -1,0 +1,55 @@
+Comment: Created with Recipe Robot v2.3.1 (https://github.com/homebysix/recipe-robot)
+Description: Downloads the latest version of Lectricus and creates a package.
+Identifier: com.github.humanendpoint.pkg.Lectricus
+ParentRecipe: com.github.humanendpoint.download.Lectricus
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Lectricus
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/package'
+
+  - Processor: FileMover
+    Arguments:
+      target: '%RECIPE_CACHE_DIR%/%NAME%/lectricus'
+      source: '%RECIPE_CACHE_DIR%/%NAME%/dist/lectricus'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+      - '%RECIPE_CACHE_DIR%/%NAME%/dist'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%'
+      destination_path: '%RECIPE_CACHE_DIR%/package/usr/local/bin'
+      overwrite: True
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/package'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+          mode: '0755'
+        - group: staff
+          path: usr/local
+          user: root
+          mode: '0755'
+        - group: staff
+          path: usr/local/bin
+          user: root
+          mode: '0755'
+        id: com.humanendpoint.lectricus
+        version: '%version%'
+        pkgname: 'lectricus-%version%'
+        options: purge_ds_store

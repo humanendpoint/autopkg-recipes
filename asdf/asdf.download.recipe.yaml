@@ -1,0 +1,29 @@
+Description: Downloads latest asdf zipfile.
+Identifier: com.github.humanendpoint.download.asdf
+MinimumVersion: '2.3'
+
+Input:
+  NAME: asdf
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: '"name": "(v[\d.]+)"'
+    result_output_var_name: version
+    url: https://github.com/asdf-vm/asdf/tags
+
+- Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+  Arguments:
+    input_string: '%version%'
+    string_to_replace: 'v'
+    replacement_string: ''
+
+- Processor: URLDownloaderPython
+  Arguments:
+    url: 'https://github.com/asdf-vm/asdf/archive/refs/tags/v%version%.zip'
+
+- Processor: FileMover
+  Arguments:
+    source: "%pathname%"
+    target: "%RECIPE_CACHE_DIR%/%NAME%-%version%.zip"
+- Processor: EndOfCheckPhase

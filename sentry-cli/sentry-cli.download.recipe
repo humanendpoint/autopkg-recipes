@@ -5,7 +5,7 @@
     <key>Description</key>
     <string>Downloads the latest version of sentry-cli. Options for arch: arm64, x86_64 and universal. If prereleases are to be included, set it to true or any non-empty value, like yes.</string>
     <key>Identifier</key>
-    <string>com.github.symmtree.download.sentry-cli</string>
+    <string>com.github.humanendpoint.download.sentry-cli</string>
     <key>Input</key>
     <dict>
         <key>NAME</key>

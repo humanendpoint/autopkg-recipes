@@ -1,0 +1,41 @@
+Description: Downloads the latest version of tilt.
+Identifier: com.github.humanendpoint.pkg.readline
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.readline
+
+Input:
+  NAME: readline
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%trimmed_version%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%trimmed_version%'
+      alt_make_install: 'make install DESTDIR=root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%trimmed_version%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.github.readline
+        version: '%trimmed_version%'
+        pkgname: 'readline-%trimmed_version%'
+        pkgtype: flat
+        options: purge_ds_store

@@ -1,0 +1,16 @@
+Description: Downloads the latest version of google-cloud-sdk.
+Identifier: com.github.humanendpoint.download.icu4c
+MinimumVersion: '2.3'
+
+Input:
+  NAME: icu4c
+
+Process:
+  - Processor: GitHubReleasesInfoProvider
+    Arguments:
+      asset_regex: icu4c-[0-9]+_[0-9]-src.tgz
+      github_repo: unicode-org/icu
+
+  - Processor: URLDownloaderPython
+
+  - Processor: EndOfCheckPhase

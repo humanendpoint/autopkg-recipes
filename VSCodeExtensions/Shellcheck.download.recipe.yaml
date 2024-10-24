@@ -1,0 +1,27 @@
+Description: Downloads a VS Code extension as a VSIX file.
+Identifier: com.github.humanendpoint.download.vsceshellcheck
+MinimumVersion: "2.3"
+
+Input:
+  NAME: VSCE-Shellcheck
+  PUBLISHER: timonwong
+  MARKETPLACE_NAME: shellcheck
+
+Process:
+#- Processor: URLTextSearcher
+#  Arguments:
+#    url: "https://marketplace.visualstudio.com/items?itemName=%PUBLISHER%.%MARKETPLACE_NAME%"
+#    re_pattern: '"Version":"([\d.]+)"'
+#    result_output_var_name: "version"
+
+# to obtain release notes, we need to use the GitHub processor
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    github_repo: vscode-shellcheck/vscode-shellcheck
+
+- Processor: URLDownloaderPython
+  Arguments:
+    url: 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/%PUBLISHER%/vsextensions/%MARKETPLACE_NAME%/%version%/vspackage'
+    filename: '%NAME%-%version%.vsix'
+
+- Processor: EndOfCheckPhase

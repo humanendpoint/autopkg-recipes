@@ -1,0 +1,48 @@
+Description: Downloads the latest version of tilt.
+Identifier: com.github.humanendpoint.pkg.tilt
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.tilt
+
+Input:
+  NAME: Tilt
+  ARCH: arm64
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin'
+
+  - Processor: PathDeleter
+    Arguments:
+      path_list:
+        - '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin/README.md'
+        - '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin/LICENSE'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group: staff
+          path: usr/local/bin
+          user: root
+        - group: staff
+          path: usr/local/bin/tilt
+          user: root
+        id: com.github.tilt
+        version: '%version%'
+        pkgname: 'tilt-%version%'

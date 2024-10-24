@@ -1,0 +1,19 @@
+Description: Downloads the latest version of automake.
+Identifier: com.github.humanendpoint.download.automake
+MinimumVersion: '2.3'
+
+Input:
+  NAME: automake
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      re_pattern: '"stable":"([^"]+)"'
+      url: https://formulae.brew.sh/api/formula/automake.json
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://ftp.gnu.org/gnu/automake/automake-%version%.tar.gz'
+
+  - Processor: EndOfCheckPhase
