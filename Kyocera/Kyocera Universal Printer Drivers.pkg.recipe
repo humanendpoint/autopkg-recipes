@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Creates a package for the universal drivers for Kyocera printers.</string>
 	<key>Identifier</key>
-	<string>com.github.symmtree.pkg.KyoceraUniversalDriver</string>
+	<string>com.github.humanendpoint.pkg.KyoceraUniversalDriver</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -16,7 +16,7 @@
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.symmtree.download.KyoceraUniversalDriver</string>
+	<string>com.github.humanendpoint.download.KyoceraUniversalDriver</string>
 	<key>Process</key>
 	<array>        
 		<dict>

@@ -3,7 +3,7 @@ Identifier: com.github.humanendpoint.sign.vsceyaml
 ParentRecipe: com.github.humanendpoint.pkg.vsceyaml
 
 Input:
-  SIGNINGCERTIFICATE: 'Developer ID Installer: Catawiki BV (XVNMP7V3Y4)'
+  SIGNINGCERTIFICATE: ''
 
 Process:
 - Processor: com.github.rtrouton.SharedProcessors/PkgSigner

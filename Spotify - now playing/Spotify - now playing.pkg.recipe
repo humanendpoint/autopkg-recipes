@@ -7,7 +7,7 @@
 	<key>Description</key>
 	<string>Downloads the latest version of Spotify - now playing and creates a package.</string>
 	<key>Identifier</key>
-	<string>com.github.symmtree.pkg.Spotify-nowplaying</string>
+	<string>com.github.humanendpoint.pkg.Spotify-nowplaying</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
@@ -16,7 +16,7 @@
 	<key>MinimumVersion</key>
 	<string>1.0.0</string>
 	<key>ParentRecipe</key>
-	<string>com.github.symmtree.download.Spotify-nowplaying</string>
+	<string>com.github.humanendpoint.download.Spotify-nowplaying</string>
 	<key>Process</key>
 	<array>
 		<dict>

@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Downloads the latest version of tfenv.</string>
 	<key>Identifier</key>
-	<string>com.github.catawiki.download.tfenv</string>
+	<string>com.github.humanendpoint.download.tfenv</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>
