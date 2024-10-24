@@ -83,7 +83,7 @@ exit 0</string>
                         <key>pkgname</key>
                         <string>%PYTHON_PKG_NAME%</string>
                         <key>id</key>
-                        <string>com.github.catawiki.%NAME%</string>
+                        <string>com.github.%NAME%</string>
                         <key>version</key>
                         <string>%version%</string>
                         <key>options</key>
