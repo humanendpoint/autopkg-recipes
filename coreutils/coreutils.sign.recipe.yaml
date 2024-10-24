@@ -3,7 +3,7 @@ Identifier: com.github.humanendpoint.sign.coreutils
 ParentRecipe: com.github.humanendpoint.pkg.coreutils
 
 Input:
-  SIGNINGCERTIFICATE: 'Developer ID Installer: Catawiki BV (XVNMP7V3Y4)'
+  SIGNINGCERTIFICATE: 'Developer ID Installer: ()'
 
 Process:
 - Processor: com.github.rtrouton.SharedProcessors/PkgSigner
