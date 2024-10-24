@@ -5,14 +5,14 @@
       <key>Description</key>
       <string>Signs a provided installer package using a signing certificate identifier.</string>
       <key>Identifier</key>
-      <string>com.github.catawiki.sign.Colima</string>
+      <string>com.github.humanendpoint.sign.Colima</string>
       <key>Input</key>
       <dict>
          <key>SIGNINGCERTIFICATE</key>
          <string></string>
       </dict>
       <key>ParentRecipe</key>
-      <string>com.github.catawiki.pkg.Colima</string>
+      <string>com.github.humanendpoint.pkg.Colima</string>
       <key>Process</key>
       <array>
          <dict>
