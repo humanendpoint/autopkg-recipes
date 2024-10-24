@@ -5,7 +5,7 @@ ParentRecipe: com.github.humanendpoint.download.docker-cli
 
 Input:
   NAME: Docker
-  BINARYSIGNING: 'Developer ID Application: Catawiki BV (XVNMP7V3Y4)'
+  BINARYSIGNING: 'Developer ID Application: ()'
 
 Process:
   - Processor: PkgRootCreator
