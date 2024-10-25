@@ -38,5 +38,4 @@ Process:
         id: com.gnu.libyaml
         version: '%version%'
         pkgname: 'libyaml-%version%'
-        pkgtype: flat
         options: purge_ds_store
