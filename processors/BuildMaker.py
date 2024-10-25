@@ -2,6 +2,7 @@
 """
 Runs `configure` and `make DESTDIR=' (both can be changed) on a downloaded source path.
 The then compiled binary file/accompaning folders can be packaged up and used in a `.pkg` file.
+(c) 2023 Tom Tunberg
 """
 
 import os
