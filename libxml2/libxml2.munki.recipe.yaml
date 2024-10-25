@@ -1,0 +1,45 @@
+Description: Uploads the latest version of Docker CLI.
+Identifier: com.github.humanendpoint.munki.libxml2
+ParentRecipe: com.github.humanendpoint.pkg.libxml2
+MinimumVersion: '2.3'
+
+Input:
+  NAME: libxml2
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  pkginfo:
+    catalogs:
+      - production
+    developer: GNU
+    description: libxml2 is an XML toolkit implemented in C, originally developed for the GNOME Project.
+    display_name: libxml2
+    unattended_install: true
+    requires:
+    - readline
+    - icu4c
+    - pkg-config
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/package'
+      installs_item_paths:
+        - /usr/local/bin/xml2-config
+        - /usr/local/bin/xmllint
+        - /usr/local/include/libxml2
+        - /usr/local/share/aclocal/libxml.m4
+        - /usr/local/share/doc/libxml2
+        - /usr/local/share/gtk-doc/html/libxml2
+        - /usr/local/share/man/man1/xml2-config.1
+        - /usr/local/share/man/man1/xmlcatalog.1
+        - /usr/local/share/man/man1/xmllint.1
+        - /usr/local/lib/cmake
+        - /usr/local/lib/libxml2.2.dylib
+        - /usr/local/lib/libxml2.dylib
+        - /usr/local/lib/libxml2.la
+        - /usr/local/lib/pkgconfig
+
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

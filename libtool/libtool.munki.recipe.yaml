@@ -1,0 +1,33 @@
+Description: Imports the latest version of libtool into Munki.
+Identifier: com.github.humanendpoint.munki.libtool
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.libtool
+
+Input:
+  NAME: libtool
+  MUNKI_REPO_SUBDIR: 'apps/gnu'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: Generic library support script. Made by GNU.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    requires:
+    - m4
+    unattended_install: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+      installs_item_paths:
+        - /usr/local/bin/libtool
+        - /usr/local/share/libtool
+
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

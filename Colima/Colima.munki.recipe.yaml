@@ -1,0 +1,64 @@
+Description: Packages and uploads the latest version of libxml2.
+Identifier: com.github.humanendpoint.munki.Colima
+ParentRecipe: com.github.humanendpoint.pkg.Colima
+MinimumVersion: '2.3'
+
+Input:
+  NAME: colima
+  MUNKI_REPO_SUBDIR: 'apps/%NAME%'
+  INPUT_DESCRIPTION: |
+      <a target='new' href='https://github.com/abiosoft/colima'>Colima</a> is a free and open-source web browser project, mainly developed and maintained by Google. This codebase provides the vast majority of code for the Google Chrome browser, which is proprietary software and has some additional features. The Chromium codebase is widely used.<br>
+      <br>
+      <h5>Features</h5>
+      <ul>
+      <li>Simple CLI interface</li>
+      <li>Docker and Containerd support</li>
+      <li>Port Forwarding</li>
+      <li>Volume mounts</li>
+      <li>Kubernetes</li>
+      <li>Multiple instances</li>
+      <li>Container runtimes with minimal setup</li>
+      </ul>
+      <br>
+  pkginfo:
+    catalogs:
+      - production
+    description:
+      Container runtimes with minimal setup.
+    developer: Abiosoft
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+    postinstall_script: |
+      #!/bin/bash
+      install /usr/local/bin/colima/colima-Darwin-arm64 /usr/local/bin/colima
+      rm /usr/local/bin/colima/colima-Darwin-arm64
+    uninstall_script: |
+      #!/bin/bash
+      rm /usr/local/bin/colima
+
+Process:
+- Processor: MunkiInstallsItemsCreator
+  Arguments:
+    faux_root: '%RECIPE_CACHE_DIR%/%NAME%'
+    installs_item_paths:
+      - /usr/local/bin/colima
+
+- Processor: MunkiPkginfoMerger
+
+- Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+  Arguments:
+    input_string: "%release_notes%"
+    string_to_replace: "\n"
+    replacement_string: "<br>"
+
+- Processor: MunkiPkginfoMerger
+  Arguments:
+    additional_pkginfo:
+      description: >
+        %INPUT_DESCRIPTION% <br><br>Release notes:<br><a target='new' href='https://github.com/abiosoft/colima'>colima GitHub</a><br> %output_string%
+
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pkg_path%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

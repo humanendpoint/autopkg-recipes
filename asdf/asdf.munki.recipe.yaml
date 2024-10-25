@@ -1,0 +1,30 @@
+Description: Uploads the latest version of asdf.
+Identifier: com.github.humanendpoint.munki.asdf
+ParentRecipe: com.github.humanendpoint.pkg.asdf
+MinimumVersion: '2.3'
+
+Input:
+  NAME: asdf
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  pkginfo:
+    catalogs:
+      - testing
+    developer: Akash Manohar
+    description: asdf is a CLI tool that can manage multiple language runtime versions on a per-project basis. It is like gvm, nvm, rbenv & pyenv (and more) all in one! Simply install your language's plugin!
+    display_name: asdf
+    unattended_install: true
+    requires:
+      - autoconf
+      - automake
+      - coreutils
+      - libtool
+      - libyaml
+      - openssl
+      - readline
+      - unixodbc
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

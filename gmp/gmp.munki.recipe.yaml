@@ -1,0 +1,27 @@
+Description: Imports the latest version of gmp into Munki.
+Identifier: com.github.humanendpoint.munki.gmp
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.gmp
+
+Input:
+  NAME: gmp
+  MUNKI_REPO_SUBDIR: 'apps/gnu'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: GNU multiple precision arithmetic library.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    requires:
+    - autoconf
+    - automake
+    - libtool
+    unattended_install: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

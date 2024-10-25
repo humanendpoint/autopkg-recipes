@@ -1,0 +1,12 @@
+Description: Signs a provided installer package using a signing certificate identifier.
+Identifier: com.github.humanendpoint.sign.icu4c
+ParentRecipe: com.github.humanendpoint.pkg.icu4c
+
+Input:
+  SIGNINGCERTIFICATE: 'Developer ID Installer: ()'
+
+Process:
+- Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+  Arguments:
+    pkg_path: '%pkg_path%'
+    signing_cert: '%SIGNINGCERTIFICATE%'

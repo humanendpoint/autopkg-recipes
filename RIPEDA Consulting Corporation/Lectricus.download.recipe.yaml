@@ -1,0 +1,25 @@
+Comment: Created with Recipe Robot v2.3.1 (https://github.com/homebysix/recipe-robot)
+Description: Downloads the latest version of Lectricus.
+Identifier: com.github.humanendpoint.download.Lectricus
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Lectricus
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: lectricus-macOS-universal.zip
+    github_repo: ripeda/Lectricus
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-%version%.zip'
+
+- Processor: EndOfCheckPhase
+
+- Processor: Unarchiver
+  Arguments:
+    archive_path: '%pathname%'
+    destination_path: '%RECIPE_CACHE_DIR%/%NAME%'
+    purge_destination: true

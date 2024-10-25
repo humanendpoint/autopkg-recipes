@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Downloads the latest version of Microsoft Teams exe from Microsoft. Environment can be defined (although production seems to be the only available), as can platform (defaults to osx).</string>
+    <key>Identifier</key>
+    <string>com.github.symmtree.download.MSTeams-Win</string>
+    <key>MinimumVersion</key>
+    <string>0.6.0</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>MSTeams</string>
+        <key>MSTEAMS_ENVIRONMENT</key>
+        <string>production</string>
+        <key>MSTEAMS_PLATFORM</key>
+        <string>windows</string>
+    </dict>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>com.github.apettinen.SharedProcessors/MSTeamsURLProvider</string>
+            <key>Arguments</key>
+            <dict>
+                <key>environment</key>
+                <string>%MSTEAMS_ENVIRONMENT%</string>
+                <key>platform</key>
+                <string>%MSTEAMS_PLATFORM%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>curl_opts</key>
+                <array>
+                    <string>--no-alpn</string>
+                </array>
+                <key>overwrite</key>
+                <string>False</string>
+            </dict>
+        </dict>
+		<dict>
+			<key>Processor</key>
+			<string>com.github.hansen-m.SharedProcessors/HachoirMetaDataProvider3</string>
+			<key>Arguments</key>
+			<dict>
+				<key>file_path</key>
+				<string>%pathname%</string>
+				<key>metadata_key</key>
+				<string>version</string>
+				<key>output_var_name</key>
+				<string>version</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+    </array>
+</dict>
+</plist>

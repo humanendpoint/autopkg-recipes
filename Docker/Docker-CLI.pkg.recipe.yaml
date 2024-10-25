@@ -1,0 +1,49 @@
+Description: Downloads the latest version of Docker CLI.
+Identifier: com.github.humanendpoint.pkg.docker-cli
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.docker-cli
+
+Input:
+  NAME: Docker
+  BINARYSIGNING: 'Developer ID Application: ()'
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+        usr/local/bin/docker: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin'
+
+  - Processor: com.github.humanendpoint.processors/BinarySigner
+    Arguments:
+      binary_path: '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin/docker/docker'
+      signing_identity: '%BINARYSIGNING%'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group: staff
+          path: usr/local/bin
+          user: root
+        - group: staff
+          path: usr/local/bin/docker
+          user: root
+        id: com.docker.docker
+        pkgtype: flat
+        version: '%version%'
+        pkgname: 'docker-cli-%version%'

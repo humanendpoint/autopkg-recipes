@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of Adobe's Creative Cloud Installer for Windows.</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.download.iLokLicenseManager-Win</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>iLokLicenseManager</string>
+		<key>DOWNLOAD_URL</key>
+		<string>https://installers.ilok.com/iloklicensemanager/LicenseSupportInstallerWin64.zip</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.6.1</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>filename</key>
+				<string>%NAME%.zip</string>
+				<key>url</key>
+				<string>%DOWNLOAD_URL%</string>
+			</dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/downloads</string>
+			</dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>pattern</key>
+				<string>%RECIPE_CACHE_DIR%/downloads/**/License Support*.exe</string>
+			</dict>
+			<key>Processor</key>
+			<string>FileFinder</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>com.github.jgstew.SharedProcessors/SharedUtilityMethods</string>
+		</dict>
+ 		<dict>
+			<key>Processor</key>
+			<string>com.github.jgstew.SharedProcessors/FileExeVersionExtractor</string>
+			<key>Arguments</key>
+			<dict>
+				<key>exe_path</key>
+				<string>%found_filename%</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+	</array>
+</dict>
+</plist>
+

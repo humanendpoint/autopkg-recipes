@@ -1,0 +1,41 @@
+Description: Imports the latest version of docker-buildx into Munki.
+Identifier: com.github.humanendpoint.munki.docker-buildx
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.docker-buildx
+
+Input:
+  NAME: docker-buildx
+  MUNKI_REPO_SUBDIR: 'apps/Docker'
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: Docker CLI plugin for extended build capabilities with BuildKit. Used together with Docker-Cli. Will place the binary in ~/.docker/cli-plugins.
+    developer: Docker
+    display_name: Docker-Buildx
+    name: '%NAME%'
+    unattended_install: true
+    postinstall_script: |
+      #!/bin/bash
+      loggedInUser=$(stat -f%Su /dev/console)
+      dockerDir="/Users/$loggedInUser/.docker"
+      cliPluginsDir="$dockerDir/cli-plugins"
+
+      if [ ! -d "$dockerDir" ]; then
+          mkdir -p "$dockerDir"
+      fi
+
+      if [ ! -d "$cliPluginsDir" ]; then
+          mkdir "$cliPluginsDir"
+      fi
+
+      mv /usr/local/bin/buildx-v*.darwin-arm64 $cliPluginsDir
+      chown $loggedInUser:staff $cliPluginsDir/buildx-v*.darwin-arm64
+    requires:
+      - Docker
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

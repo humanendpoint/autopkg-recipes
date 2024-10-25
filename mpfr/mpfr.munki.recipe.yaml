@@ -1,0 +1,23 @@
+Description: Imports the latest version of mpfr into Munki.
+Identifier: com.github.humanendpoint.munki.mpfr
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.mpfr
+
+Input:
+  NAME: mpfr
+  MUNKI_REPO_SUBDIR: 'apps/gnu'
+  pkginfo:
+    catalogs:
+      - testing
+    category: Development
+    description: C library for multiple-precision floating-point computations.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

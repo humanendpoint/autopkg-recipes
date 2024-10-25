@@ -1,0 +1,32 @@
+Description: Imports the latest version of libksba into Munki.
+Identifier: com.github.humanendpoint.munki.libksba
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.libksba
+
+Input:
+  NAME: libksba
+  MUNKI_REPO_SUBDIR: 'apps/gnu'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: X.509 and CMS library from GNU.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    requires:
+    - libgpg-error
+    unattended_install: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+      installs_item_paths:
+        - /usr/local/bin/ksba-config
+
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

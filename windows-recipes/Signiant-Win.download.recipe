@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Comment</key>
+	<string>Created with care.</string>
+	<key>Description</key>
+	<string>Downloads the latest version of SigniantApp for Windows and adds a version to the filename. Currently requires manual input of the SUPPLIED_VERSION variable.</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.download.Signiant-Win</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>Signiant App</string>
+		<key>APP_NAME</key>
+		<string>SigniantApp_Installer</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>Process</key>
+	<array>
+		<dict>
+            <key>Processor</key>
+            <string>URLTextSearcher</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://updates.signiant.com/signiant_app/signiant-app-info-mac.xml</string>
+                <key>re_pattern</key>
+                <string>\d.\d+(?:\.\d+)\d</string>
+                <key>result_output_var_name</key>
+                <string>version</string>
+            </dict>
+		</dict>
+		<dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://updates.signiant.com/signiant_app/%APP_NAME%_%version%.msi</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>

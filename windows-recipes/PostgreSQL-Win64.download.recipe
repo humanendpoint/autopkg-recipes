@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Comment</key>
+    <string>Created with Recipe Robot v1.0.5 (https://github.com/homebysix/recipe-robot)</string>
+    <key>Description</key>
+    <string>Downloads the latest version of PostgreSQL for Windows.</string>
+    <key>Identifier</key>
+    <string>com.github.symmtree.download.PostgreSQL-Win64</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>PostgreSQL</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>1.0.0</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>URLTextSearcher</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://www.enterprisedb.com/download-postgresql-binaries</string>
+                <key>re_pattern</key>
+                <string>Version (14\..*?\d)</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://get.enterprisedb.com/postgresql/postgresql-%match%-1-windows-x64.exe</string>
+            </dict>
+        </dict>
+        <dict>
+			<key>Arguments</key>
+			<dict>
+				<key>file_path</key>
+				<string>%pathname%</string>
+			</dict>
+			<key>Processor</key>
+			<string>com.github.hansen-m.SharedProcessors/HachoirMetaDataProvider3</string>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+    </array>
+</dict>
+</plist>

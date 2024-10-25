@@ -1,0 +1,51 @@
+# Missing: A Processor to append info (including variables!) passed from earlier processors
+# to yaml files
+
+Description: Downloads the latest version of KNIME Analytics Installer for Windows.
+Identifier: com.github.symmtree.download.KNIMEAnalytics-Win
+MinimumVersion: '2.3'
+
+Input:
+  NAME: KNIME Analytics
+  DOWNLOAD_URL: https://download.knime.org/analytics-platform/win/knime-latest-installer-win32.win32.x86_64.exe
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%.exe'
+    url: '%DOWNLOAD_URL%'
+
+- Processor: com.github.hansen-m.SharedProcessors/HachoirMetaDataProvider3
+  Arguments:
+    file_path: '%pathname%'
+
+- Processor: com.github.hansen-m.SharedProcessors/BESRelevanceProvider
+
+- Processor: FileMover
+  Arguments:
+    overwrite: 'false'
+    source: '%pathname%'
+    target: '%RECIPE_CACHE_DIR%/downloads/%NAME%-%version%.exe'
+
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/downloads/*.exe'
+
+- Processor: FileCreator
+  Arguments:
+    file_content: |
+      
+      KNIME Analytics: 
+        display_name: '%NAME%'
+        check:
+          registry:
+            name: '%NAME%'
+            version: '%version%'
+        installer:
+          hash: '%bes_sha256%'
+          location: /'%NAME%'-'%version%'.exe
+          type: exe
+        version: '%version%'
+    file_path: '%RECIPE_CACHE_DIR%/catalog.yaml'
+
+- Processor: EndOfCheckPhase

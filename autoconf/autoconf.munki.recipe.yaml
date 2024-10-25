@@ -1,0 +1,25 @@
+Description: Imports the latest version of autoconf into Munki.
+Identifier: com.github.humanendpoint.munki.autoconf
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.autoconf
+
+Input:
+  NAME: autoconf
+  MUNKI_REPO_SUBDIR: 'apps/gnu'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: Automatic configure script builder.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    requires:
+    - m4
+    unattended_install: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

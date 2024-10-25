@@ -1,0 +1,29 @@
+Description: Imports the latest version of gettext into Munki.
+Identifier: com.github.humanendpoint.munki.pkg-config
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.pkg-config
+
+Input:
+  NAME: pkg-config
+  MUNKI_REPO_SUBDIR: 'apps/pkg-config'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: pkg-config is a helper tool used when compiling applications and libraries.
+    developer: GNOME
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/package'
+      installs_item_paths:
+        - /usr/local/bin/pkg-config
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

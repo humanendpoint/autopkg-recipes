@@ -1,0 +1,42 @@
+Description: Packages the latest version of mpfr.
+Identifier: com.github.humanendpoint.pkg.mpfr
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.mpfr
+
+Input:
+  NAME: mpfr
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+      archive_format: tar_gzip
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_make_install: 'make install DESTDIR=%RECIPE_CACHE_DIR%/root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.gnu.mpfr
+        version: '%version%'
+        pkgname: 'mpfr-%version%'
+        pkgtype: flat
+        options: purge_ds_store

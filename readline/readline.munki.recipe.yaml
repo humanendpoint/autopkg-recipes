@@ -1,0 +1,36 @@
+Description: Imports the latest version of readline into Munki.
+Identifier: com.github.humanendpoint.munki.readline
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.readline
+
+Input:
+  NAME: readline
+  MUNKI_REPO_SUBDIR: 'apps/Homebrew'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: Library for command-line editing.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/%NAME%-%trimmed_version%/root'
+      installs_item_paths:
+        - /usr/local/include/readline
+        - /usr/local/lib/libhistory.a
+        - /usr/local/lib/libreadline.a
+        - /usr/local/lib/pkgconfig
+        - /usr/local/lib/pkgconfig/history.pc
+        - /usr/local/lib/pkgconfig/readline.pc
+        - /usr/local/share/doc/readline
+
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

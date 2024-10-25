@@ -1,0 +1,58 @@
+Description: Imports the latest version of the YAML VSCode Extension.
+Identifier: com.github.humanendpoint.munki.vsceyaml
+ParentRecipe: com.github.humanendpoint.pkg.vsceyaml
+MinimumVersion: '2.3'
+
+Input:
+  NAME: VSCE-YAML
+  MUNKI_REPO_SUBDIR: apps/VSCE
+  INPUT_DESCRIPTION: Provides comprehensive YAML Language support to Visual Studio Code, via the yaml-language-server, with built-in Kubernetes syntax support.
+  pkginfo:
+    catalogs:
+    - testing
+    category: VSCode Extensions
+    description: ''
+    developer: Red Hat
+    display_name: YAML
+    name: '%NAME%'
+    requires:
+    - VisualStudioCode
+    unattended_install: true
+    installcheck_script: |
+      #!/bin/bash
+
+      loggedInUser=$(stat -f %Su /dev/console)
+
+      if compgen -G "/Users/$loggedInUser/.vscode/extensions/redhat.vscode-yaml-*" > /dev/null; then
+        echo "Python Linter is installed."
+        # Loop through matching directories
+        for dir in /Users/$loggedInUser/.vscode/extensions/redhat.vscode-yaml-*; do
+          localVersion=$(cat "$dir/package.json" | jq -r '.version')
+          desiredVersion="%version%"
+          if [[ "$localVersion" == "$desiredVersion" ]]; then
+            echo "Python Linter is up-to-date."
+          else
+            echo "Python Linter is not up-to-date."
+          fi
+        done
+      else
+        echo "Python Linter is not installed."
+      fi
+
+Process:
+- Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+  Arguments:
+    input_string: "%release_notes%"
+    string_to_replace: "\n"
+    replacement_string: "<br>"
+
+- Processor: MunkiPkginfoMerger
+  Arguments:
+    additional_pkginfo:
+      description: >
+        %INPUT_DESCRIPTION% <br><br>Release notes:<br><a target='new' href='https://github.com/redhat-developer/vscode-yaml'>Red Hat YAML GitHub</a><br> %output_string%
+
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: "%pkg_path%"
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

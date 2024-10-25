@@ -1,0 +1,36 @@
+Description: Uploads the latest version of Docker CLI.
+Identifier: com.github.humanendpoint.munki.docker-cli
+ParentRecipe: com.github.humanendpoint.pkg.docker-cli
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Docker
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  ARCHITECTURE: arm64
+  pkginfo:
+    catalogs:
+      - production
+    developer: Docker
+    description: This installs the Docker CLI only, without the desktop .app.
+    name: '%NAME%'
+    display_name: Docker CLI
+    unattended_install: true
+    supported_architectures:
+      - '%ARCHITECTURE%'
+    postinstall_script:
+      #!/bin/bash
+      xattr -dr com.apple.quarantine /usr/local/bin/docker/docker
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/%NAME%'
+      installs_item_paths:
+        - /usr/local/bin/docker
+
+  - Processor: MunkiPkginfoMerger
+
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

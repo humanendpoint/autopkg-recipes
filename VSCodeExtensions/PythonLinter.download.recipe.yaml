@@ -1,0 +1,27 @@
+Description: Downloads a VS Code extension as a VSIX file.
+Identifier: com.github.humanendpoint.download.vscepythonlinter
+MinimumVersion: "2.3"
+
+Input:
+  NAME: VSCE-PythonLinter
+  PUBLISHER: ms-python
+  MARKETPLACE_NAME: python
+
+Process:
+#- Processor: URLTextSearcher
+#  Arguments:
+#    url: "https://marketplace.visualstudio.com/items?itemName=%PUBLISHER%.%MARKETPLACE_NAME%"
+#    re_pattern: '"Version":"([\d.]+)"'
+#    result_output_var_name: "version"
+
+# to obtain release notes, we need to use the GitHub processor
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    github_repo: microsoft/vscode-python
+
+- Processor: URLDownloaderPython
+  Arguments:
+    url: 'https://marketplace.visualstudio.com/_apis/public/gallery/publishers/%PUBLISHER%/vsextensions/%MARKETPLACE_NAME%/%version%/vspackage'
+    filename: '%NAME%-%version%.vsix'
+
+- Processor: EndOfCheckPhase

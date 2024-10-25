@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads latest PowerBI Desktop for Windows installer</string>
+	<key>Identifier</key>
+	<string>com.github.symmtree.download.PowerBIDesktop-Win64</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>PowerBI Desktop</string>
+		<key>DOWNLOAD_URL</key>
+		<string>https://go.microsoft.com/fwlink/?linkid=521662</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.2.0</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+			<key>Arguments</key>
+			<dict>
+				<key>url</key>
+				<string>%DOWNLOAD_URL%</string>
+				<key>filename</key>
+				<string>%NAME%.exe</string>
+			</dict>
+		</dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.github.jgstew.SharedProcessors/SharedUtilityMethods</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.github.jgstew.SharedProcessors/FileExeVersionExtractor</string>
+            <key>Arguments</key>
+            <dict>
+                <key>exe_path</key>
+                <string>%pathname%</string>
+                <key>ignore_errors</key>
+                <string>True</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>source_path</key>
+                <string>%pathname%</string>
+                <key>destination_path</key>
+                <string>%RECIPE_CACHE_DIR%/downloads/%NAME%-%version%-x64.exe</string>
+                <key>overwrite</key>
+                <string>false</string>
+            </dict>
+            <key>Processor</key>
+            <string>Copier</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/downloads/%NAME%-%version%-x64.exe</string>
+            </dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+        </dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+	</array>
+</dict>
+</plist>

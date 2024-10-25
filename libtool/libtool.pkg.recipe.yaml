@@ -1,0 +1,42 @@
+Description: Packages the latest version of libtool.
+Identifier: com.github.humanendpoint.pkg.libtool
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.libtool
+
+Input:
+  NAME: libtool
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --disable-dependency-tracking --enable-ltdl-install'
+      alt_make_install: 'make install DESTDIR=%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.gnu.libtool
+        version: '%version%'
+        pkgname: 'libtool-%version%'
+        pkgtype: flat
+        options: purge_ds_store

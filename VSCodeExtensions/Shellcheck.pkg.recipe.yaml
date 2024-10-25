@@ -1,0 +1,78 @@
+Description: creates a package for the Terraform VSCode Extension.
+Identifier: com.github.humanendpoint.pkg.vsceshellcheck
+ParentRecipe: com.github.humanendpoint.download.vsceshellcheck
+MinimumVersion: '2.3'
+
+Input:
+  NAME: VSCE-Shellcheck
+
+Process:
+- Processor: PkgRootCreator
+  Arguments:
+    pkgdirs:
+      usr: '0755'
+      usr/local: '0755'
+      usr/local/bin: '0755'
+      usr/local/bin/extension_manager: '0755'
+    pkgroot: '%RECIPE_CACHE_DIR%/package'
+
+- Processor: PkgRootCreator
+  Arguments:
+    pkgdirs: {}
+    pkgroot: "%RECIPE_CACHE_DIR%/scripts"
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%/package/usr/local/bin/extension_manager/%NAME%-%version%.vsix'
+    source_path: '%RECIPE_CACHE_DIR%/downloads/%NAME%-%version%.vsix'
+
+- Processor: FileCreator
+  Arguments:
+    file_path: '%RECIPE_CACHE_DIR%/scripts/postinstall'
+    file_content: |
+      #!/usr/bin/env bash
+      version="%version%"
+      packageName="%NAME%"
+      set -euxo pipefail
+      assigned_user="$(stat -f %Su /dev/console)"
+      uid=$(id -u "$assigned_user")
+
+      EXTENSION_SOURCE='/usr/local/bin/extension_manager'
+      EXTENSION='$packageName-$version.vsix'
+      VSCODE_BIN='/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code'
+
+      source="${EXTENSION_SOURCE}/${EXTENSION}"
+
+      echo >&2 "Installing ${source}..."
+
+      launchctl asuser "$uid" sudo -iu "$assigned_user" /bin/bash -c "\"$VSCODE_BIN\" --install-extension \"$source\""
+
+      echo >&2 'Installation completed successfully!'
+    file_mode: "0755"
+
+- Processor: PkgCreator
+  Arguments:
+    pkg_request:
+      pkgroot: '%RECIPE_CACHE_DIR%/package'
+      chown:
+      - group: staff
+        path: usr
+        user: root
+        mode: '0755'
+      - group: staff
+        path: usr/local
+        user: root
+        mode: '0755'
+      - group: staff
+        path: usr/local/bin
+        user: root
+        mode: '0755'
+      - group: staff
+        path: usr/local/bin/extension_manager
+        user: root
+        mode: '0755'
+      id: com.humanendpoint.vsceshellcheck
+      version: '%version%'
+      pkgname: '%NAME%-%version%'
+      options: purge_ds_store
+      scripts: Scripts

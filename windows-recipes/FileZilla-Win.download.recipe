@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Downloads the latest version FileZilla Win Client.</string>
+    <key>Identifier</key>
+    <string>com.github.symmtree.download.FileZilla-Win</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>FileZilla</string>
+        <key>USER_AGENT</key>
+        <string>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4</string>
+        <key>SEARCH_URL</key>
+        <string>https://filezilla-project.org/download.php?show_all=1</string>
+        <key>SEARCH_PATTERN</key>
+        <string><![CDATA[(https.*FileZilla.*_win64.*[0-9].*)" ]]></string>
+        <key>VERSION_SEARCH_PATTERN</key>
+        <string><![CDATA[The latest stable version of FileZilla Client is ([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3})]]></string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.2.9</string>
+    <key>Process</key>
+    <array>
+        <dict>
+             <key>Processor</key>
+             <string>URLTextSearcher</string>
+             <key>Arguments</key>
+             <dict>
+                 <key>url</key>
+                 <string>%SEARCH_URL%</string>
+                 <key>re_pattern</key>
+                 <string>%VERSION_SEARCH_PATTERN%</string>
+                 <key>result_output_var_name</key>
+                 <string>version</string>
+                 <key>overwrite</key>
+				<string>false</string>
+             </dict>
+         </dict>
+         <dict>
+              <key>Processor</key>
+              <string>URLTextSearcher</string>
+              <key>Arguments</key>
+              <dict>
+                  <key>url</key>
+                  <string>%SEARCH_URL%</string>
+                  <key>re_pattern</key>
+                  <string>%SEARCH_PATTERN%</string>
+                  <key>result_output_var_name</key>
+                  <string>match</string>
+              </dict>
+          </dict>
+        <dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+            <key>Arguments</key>
+            <dict>
+          		<key>CHECK_FILESIZE_ONLY</key>
+          		<true/>
+                <key>url</key>
+                <string>%match%</string>
+                <key>filename</key>
+                <string>FileZilla.exe</string>
+                <key>request_headers</key>
+                <dict>
+                <key>user-agent</key>
+                <string>%USER_AGENT%</string>
+                <key>overwrite</key>
+                <string>true</string>
+                </dict>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+    </array>
+</dict>
+</plist>

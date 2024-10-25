@@ -1,0 +1,43 @@
+Description: Packages the latest version of coreutils.
+Identifier: com.github.humanendpoint.pkg.coreutils
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.coreutils
+
+Input:
+  NAME: coreutils
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+      archive_format: tar
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --with-gmp --without-selinux'
+      alt_make_install: 'make install DESTDIR=%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.gnu.coreutils
+        version: '%version%'
+        pkgname: 'coreutils-%version%'
+        pkgtype: flat
+        options: purge_ds_store

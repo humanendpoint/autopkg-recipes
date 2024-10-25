@@ -1,0 +1,32 @@
+Description: Imports the latest version of gettext into Munki.
+Identifier: com.github.humanendpoint.munki.gettext
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.gettext
+
+Input:
+  NAME: gettext
+  MUNKI_REPO_SUBDIR: 'apps/Homebrew'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: GNU internationalization (i18n) and localization (l10n) library.
+    developer: GNU Software
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+    requires:
+    - libxml2
+
+Process:
+  - Processor: MunkiInstallsItemsCreator
+    Arguments:
+      faux_root: '%RECIPE_CACHE_DIR%/package'
+      installs_item_paths:
+        - /usr/local/bin/gettext
+
+  - Processor: MunkiPkginfoMerger
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

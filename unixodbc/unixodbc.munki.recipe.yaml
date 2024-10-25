@@ -1,0 +1,21 @@
+Description: Uploads the latest version of unixodbc.
+Identifier: com.github.humanendpoint.munki.unixodbc
+ParentRecipe: com.github.humanendpoint.pkg.unixodbc
+MinimumVersion: '2.3'
+
+Input:
+  NAME: unixodbc
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  pkginfo:
+    catalogs:
+      - testing
+    developer: Peter Harvey and Nick Gorham
+    description: ODBC is an open specification for providing application developers with a predictable API with which to access Data Sources. Data Sources include SQL Servers and any Data Source with an ODBC Driver.
+    display_name: unixodbc
+    unattended_install: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

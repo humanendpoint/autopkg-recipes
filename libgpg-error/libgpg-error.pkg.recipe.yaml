@@ -1,0 +1,64 @@
+Description: Packages the latest version of libgpg-error.
+Identifier: com.github.humanendpoint.pkg.libgpg-error
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.libgpg-error
+
+Input:
+  NAME: libgpg-error
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+      archive_format: tar_bzip2
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/fix-posix.patch'
+      file_content: |
+        --- src/spawn-posix.c.orig	2024-06-19 02:33:41
+        +++ src/spawn-posix.c	2024-06-20 10:01:26
+        @@ -57,6 +57,7 @@
+
+         #include "gpgrt-int.h"
+
+        +extern char **environ;
+
+         /* Definition for the gpgrt_spawn_actions_t.  Note that there is a
+          * different one for Windows.  */
+      file_mode: '0755'
+
+  - Processor: com.github.humanendpoint.processors/ApplyPatch
+    Arguments:
+      patch_file: '%RECIPE_CACHE_DIR%/%NAME%-%version%/fix-posix.patch'
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --disable-silent-rules --enable-static'
+      alt_make_install: 'make && make install DESTDIR=%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        id: com.gnu.libgpg-error
+        version: '%version%'
+        pkgname: 'libgpg-error-%version%'
+        pkgtype: flat
+        options: purge_ds_store

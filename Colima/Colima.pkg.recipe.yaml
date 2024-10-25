@@ -1,0 +1,49 @@
+Description: Downloads the latest version of colima
+Identifier: com.github.humanendpoint.pkg.Colima
+ParentRecipe: com.github.humanendpoint.download.Colima
+MinimumVersion: '2.3'
+
+Input:
+  NAME: colima
+  ARCH: arm64
+
+Process:
+  - Processor: URLTextSearcher
+    Arguments:
+      url: https://github.com/abiosoft/colima/tags
+      re_pattern: <a href="\/abiosoft\/colima\/releases\/tag\/v(\d+\.\d\.\d)[^\-]
+      result_output_var_name: match
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+        usr/local/bin/colima: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/downloads/colima-Darwin-%ARCH%'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%/usr/local/bin/colima/colima-Darwin-%ARCH%'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group: staff
+          path: usr/local/bin
+          user: root
+        - group: staff
+          path: usr/local/bin/colima
+          user: root
+        id: com.colima
+        version: '%match%'
+        pkgname: 'colima-%match%'

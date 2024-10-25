@@ -1,0 +1,18 @@
+Description: Downloads the latest version of libxml2.
+Identifier: com.github.humanendpoint.download.pkg-config
+MinimumVersion: '2.3'
+
+Input:
+  NAME: pkg-config
+
+Process:
+  - Processor: com.github.humanendpoint.processors/URLVersionSearcher
+    Arguments:
+      re_pattern: 'pkg-config-(\d+\.\d+\.\d+)\.tar\.gz'
+      url: https://pkgconfig.freedesktop.org/releases/
+      result_output_var_name: version
+
+  - Processor: URLDownloaderPython
+    Arguments:
+      url: 'https://pkgconfig.freedesktop.org/releases/pkg-config-%version%.tar.gz'
+      filename: pkg-config-%version%.tar.gz

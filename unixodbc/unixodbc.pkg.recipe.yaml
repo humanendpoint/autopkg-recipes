@@ -1,0 +1,42 @@
+Description: Packages the latest version of unixodbc.
+Identifier: com.github.humanendpoint.pkg.unixodbc
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.unixodbc
+
+Input:
+  NAME: unixodbc
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/root'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: com.github.humanendpoint.processors/BuildMaker
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+      alt_configure: './configure --disable-debug --disable-dependency-tracking --enable-static --enable-gui=no'
+      alt_make_install: 'make install DESTDIR="%RECIPE_CACHE_DIR%/root"'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/root'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group:
+        id: com.unixodbc
+        version: '%version%'
+        pkgname: 'unixodbc-%version%'
+        options: purge_ds_store

@@ -1,0 +1,25 @@
+Description: Imports the latest version of libyaml into Munki.
+Identifier: com.github.humanendpoint.munki.libyaml
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.pkg.libyaml
+
+Input:
+  NAME: libyaml
+  MUNKI_REPO_SUBDIR: 'apps/libyaml'
+  pkginfo:
+    catalogs:
+      - production
+    category: Development
+    description: A C library for parsing and emitting YAML.
+    developer: The YAML Project
+    display_name: '%NAME%'
+    name: '%NAME%'
+    requires:
+    - coreutils
+    unattended_install: true
+
+Process:
+  - Processor: MunkiImporter
+    Arguments:
+      pkg_path: '%pkg_path%'
+      repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
