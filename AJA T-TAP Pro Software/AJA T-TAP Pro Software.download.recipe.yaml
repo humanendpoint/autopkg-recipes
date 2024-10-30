@@ -1,0 +1,36 @@
+Description: Downloads the latest version of AJA T-Tap Pro Software.
+Identifier: com.github.humanendpoint.download.AJAT-TAPSoftware
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: AJA T-TAP Pro
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: \/support\\\/files\\\/8316\\\/en\\/(AJA-Software-Installer_macOS_v.*?\_Release.zip)
+    url: https://www.aja.com/products/t-tap-pro#support
+
+- Processor: URLDownloader
+  Arguments:
+    url: https://www.aja.com/assets/support/files/8316/en/%match%
+
+- Processor: EndOfCheckPhase
+
+- Processor: Unarchiver
+  Arguments:
+    archive_path: '%pathname%'
+    destination_path: '%RECIPE_CACHE_DIR%/unzip'
+    purge_destination: true
+
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/unzip/*.pkg'
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    expected_authority_names:
+    - 'Developer ID Installer: AJA Video Systems (9VB857J7CD)'
+    - Developer ID Certification Authority
+    - Apple Root CA
+    input_path: '%found_filename%'

@@ -1,0 +1,28 @@
+Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
+Description: Downloads the latest version of Spotify - now playing.
+Identifier: com.github.humanendpoint.download.Spotify-nowplaying
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: Spotify - now playing
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    github_repo: davicorreiajr/spotify-now-playing
+
+- Processor: URLDownloader
+  Arguments:
+    filename: '%NAME%-%version%.dmg'
+
+- Processor: EndOfCheckPhase
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%/Spotify - now playing.app'
+    requirement: 'identifier "com.electron.spotify-now-playing" and anchor apple generic and certificate leaf[subject.CN] = "Mac Developer: davicorreiajr@gmail.com (SCXVP79VQP)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */'
+
+- Processor: Versioner
+  Arguments:
+    input_plist_path: '%pathname%/Spotify - now playing.app/Contents/Info.plist'
+    plist_version_key: CFBundleShortVersionString

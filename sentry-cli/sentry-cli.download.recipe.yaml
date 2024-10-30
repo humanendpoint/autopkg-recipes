@@ -1,0 +1,20 @@
+Description: 'Downloads the latest version of sentry-cli. Options for arch: arm64, x86_64 and universal. If prereleases are to be included, set it to true or any non-empty value, like yes.'
+Identifier: com.github.humanendpoint.download.sentry-cli
+MinimumVersion: 2.0.0
+
+Input:
+  NAME: Sentry-cli
+  ARCH: universal
+  PRERELEASE: ''
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: sentry-cli-Darwin-%ARCH%
+    github_repo: getsentry/sentry-cli
+    include_prereleases: '%PRERELEASE%'
+
+- Processor: URLDownloader
+  filename: sentry-cli
+
+- Processor: EndOfCheckPhase

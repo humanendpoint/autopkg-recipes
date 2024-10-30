@@ -1,0 +1,11 @@
+Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
+Description: Downloads the latest version of Spotify - now playing and creates a package.
+Identifier: com.github.humanendpoint.pkg.Spotify-nowplaying
+ParentRecipe: com.github.humanendpoint.download.Spotify-nowplaying
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: Spotify - now playing
+
+Process:
+- Processor: AppPkgCreator

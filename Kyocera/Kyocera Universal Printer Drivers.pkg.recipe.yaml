@@ -1,0 +1,13 @@
+Comment: Made with care.
+Description: Creates a package for the universal drivers for Kyocera printers.
+Identifier: com.github.humanendpoint.pkg.KyoceraUniversalDriver
+ParentRecipe: com.github.humanendpoint.download.KyoceraUniversalDriver
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: Kyocera 5052ci Universal Drivers
+
+Process:
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/downloads/Kyocera*.pkg'

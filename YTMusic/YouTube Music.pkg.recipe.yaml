@@ -1,0 +1,14 @@
+Description: Downloads the latest version of YouTube Music and creates a package.
+Identifier: com.github.humanendpoint.pkg.YouTubeMusic
+ParentRecipe: com.github.humanendpoint.download.YouTubeMusic
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: YouTube Music
+
+Process:
+- Processor: AppPkgCreator
+
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/*.pkg'

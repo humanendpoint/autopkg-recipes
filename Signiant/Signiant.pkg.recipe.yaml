@@ -1,0 +1,10 @@
+Description: Packages the app
+Identifier: com.github.symmtree.pkg.Signiant
+ParentRecipe: com.github.symmtree.download.Signiant
+MinimumVersion: '1.0'
+
+Input:
+  NAME: Signiant App
+
+Process:
+- Processor: AppPkgCreator

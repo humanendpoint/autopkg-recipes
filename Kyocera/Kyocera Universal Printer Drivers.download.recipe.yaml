@@ -1,0 +1,33 @@
+Description: Downloads the latest version of Fiery Printer Driver Installer.
+Identifier: com.github.humanendpoint.download.KyoceraUniversalDriver
+MinimumVersion: 1.0.0
+
+Input:
+  NAME: Kyocera 5052ci Universal Drivers
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    request_headers:
+      user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15
+    url: https://www.kyoceradocumentsolutions.nl/content/download-center/nl/drivers/all/Mac_Universal_Driver_zip.download.zip
+
+- Processor: EndOfCheckPhase
+
+- Processor: Unarchiver
+  Arguments:
+    archive_path: '%pathname%'
+    destination_path: '%RECIPE_CACHE_DIR%/downloads'
+
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/downloads/**/Kyocera*.dmg'
+
+- Processor: AppDmgVersioner
+  Arguments:
+    dmg_path: '%found_filename%'
+
+- Processor: PkgCopier
+  Arguments:
+    pkg_path: '%RECIPE_CACHE_DIR%/downloads/Kyocera_5052ci_TASKalfa-%version%.pkg'
+    source_pkg: '%found_filename%/*.pkg'
