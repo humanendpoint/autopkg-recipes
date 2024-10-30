@@ -2,9 +2,9 @@
 
 These recipes are using several different SharedProcessors that are required to be sourced as repo's:
 ```
-hansen-m 
-rustymyers 
-jgstew 
+hansen-m
+rustymyers
+jgstew
 ```
 Most of these recipes are meant to be used in conjunction with an override to be able to use the
 version variable added to the filename, while also being moved to a different location to be found

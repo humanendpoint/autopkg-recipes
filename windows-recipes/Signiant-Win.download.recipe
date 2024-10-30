@@ -40,6 +40,8 @@
                 <key>url</key>
                 <string>https://updates.signiant.com/signiant_app/%APP_NAME%_%version%.msi</string>
             </dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
         </dict>
     </array>
 </dict>

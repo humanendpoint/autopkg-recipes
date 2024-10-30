@@ -37,38 +37,38 @@ Input:
     preinstall_script: |
       #!/bin/bash
       exitCode=0
-      
+
       jq="/usr/local/bin/jq"
-      
+
       # Get the currently logged-in user and go ahead if not root
       CURRENT_USER=$(/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }')
-      
+
       if [[ -n "$CURRENT_USER" && "$CURRENT_USER" != "root" ]]; then
           USER_HOME=$(/usr/bin/dscl . -read "/Users/$CURRENT_USER" NFSHomeDirectory | /usr/bin/sed 's/^[^\\/]*//g')
           # If jq is executable, proceed with script.
           # Otherwise halt and log an error.
-      
+
           if [[ -x "$jq" ]]; then
               # If an existing settings.json file exists for Visual Studio Code,
               # update it with the desired telemetry setting.
               if [[ -f "$USER_HOME/Library/Application Support/Code/User/settings.json" ]]; then
                   vscode_settings="$USER_HOME/Library/Application Support/Code/User/settings.json"
-      
+
                   # Update the telemetry settings
                   if [[ "$("$jq" '.["telemetry.telemetryLevel"]' "$vscode_settings")" != "\\"off\\"" ]]; then
                       "$jq" '. + {"telemetry.telemetryLevel": "off"}' "$vscode_settings" > tmpfile && mv tmpfile "$vscode_settings"
                   fi
-      
+
                   # Update the update.mode settings
                   if [[ "$("$jq" '.["update.mode"]' "$vscode_settings")" != "\\"none\\"" ]]; then
                       "$jq" '. + {"update.mode": "none"}' "$vscode_settings" > tmpfile && mv tmpfile "$vscode_settings"
                   fi
-      
+
                   # Update the redhat.telemetry.enabled settings
                   if [[ "$("$jq" '.["redhat.telemetry.enabled"]' "$vscode_settings")" != "false" ]]; then
                       "$jq" '. + {"redhat.telemetry.enabled": true}' "$vscode_settings" > tmpfile && mv tmpfile "$vscode_settings"
                   fi
-      
+
                   /usr/sbin/chown -R "$CURRENT_USER" "$vscode_settings"
               else
                   # If an existing settings.json file does not yet exist for Visual Studio Code,
@@ -77,7 +77,7 @@ Input:
                       sudo -u "$CURRENT_USER" /bin/mkdir -p "$USER_HOME/Library/Application Support/Code/User"
                   fi
                   vscode_settings="$USER_HOME/Library/Application Support/Code/User/settings.json"
-      
+
                   # Create a new settings.json file with telemetry settings
                   /bin/cat > "$vscode_settings" << VSCODE_SETTINGS
       {
@@ -90,9 +90,9 @@ Input:
               fi
           else
               echo "jq not executable!"
-              exitCode=1   
+              exitCode=1
           fi
-      
+
           # Verify that the desired settings are in place
           vscode_settings="$USER_HOME/Library/Application Support/Code/User/settings.json"
           if [[ "$("$jq" '.["telemetry.telemetryLevel"]' "$vscode_settings")" == "\\"off\\"" &&
@@ -103,7 +103,7 @@ Input:
               echo "telemetry and everything is a mess!"
           fi
       fi
-      
+
       exit "$exitCode"
     preuninstall_script: |
       #!/bin/bash

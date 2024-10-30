@@ -18,7 +18,7 @@
 	<key>ParentRecipe</key>
 	<string>com.github.humanendpoint.download.KyoceraUniversalDriver</string>
 	<key>Process</key>
-	<array>        
+	<array>
 		<dict>
 			<key>Arguments</key>
 			<dict>

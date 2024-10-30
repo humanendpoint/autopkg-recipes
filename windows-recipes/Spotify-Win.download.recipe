@@ -29,7 +29,7 @@
 				<key>overwrite</key>
 				<string>False</string>
 			</dict>
-        </dict>	
+        </dict>
 		<dict>
 			<key>Processor</key>
 			<string>com.github.hansen-m.SharedProcessors/HachoirMetaDataProvider3</string>

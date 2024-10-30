@@ -34,8 +34,8 @@ Process:
 - Processor: FileCreator
   Arguments:
     file_content: |
-      
-      KNIME Analytics: 
+
+      KNIME Analytics:
         display_name: '%NAME%'
         check:
           registry:
