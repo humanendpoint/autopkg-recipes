@@ -1,0 +1,15 @@
+Description: Downloads the hub cli tool from the GitHub releases page.
+Identifier: com.github.humanendpoint.download.hub-cli
+MinimumVersion: "2.3"
+
+Input:
+  NAME: hub-cli
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    github_repo: github/hub
+
+- Processor: URLDownloaderPython
+
+- Processor: EndOfCheckPhase

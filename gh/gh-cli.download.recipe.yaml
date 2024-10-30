@@ -1,0 +1,17 @@
+Description: Downloads the gh cli tool from the GitHub releases page.
+Identifier: com.github.humanendpoint.download.gh-cli
+MinimumVersion: "2.3"
+
+Input:
+  NAME: gh-cli
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    github_repo: cli/cli
+
+- Processor: URLDownloaderPython
+  Arguments:
+    url: "https://github.com/cli/cli/releases/download/v%version%/gh_%version%_macOS_arm64.zip"
+
+- Processor: EndOfCheckPhase

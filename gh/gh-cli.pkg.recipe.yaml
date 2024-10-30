@@ -1,0 +1,49 @@
+Description: Packages the latest version of gh cli.
+Identifier: com.github.humanendpoint.pkg.gh-cli
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.gh-cli
+
+Input:
+  NAME: gh-cli
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/gh_%version%_macOS_arm64/bin/gh'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/usr/local/bin'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/gh_%version%_macOS_arm64/share'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/usr/local/share'
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group: staff
+          path: usr/local/bin
+          user: root
+        id: com.github.gh-cli
+        version: '%version%'
+        pkgname: 'gh-cli-%version%'
+        options: purge_ds_store

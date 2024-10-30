@@ -1,0 +1,105 @@
+Description: Packages the latest version of hub-cli.
+Identifier: com.github.humanendpoint.pkg.hub-cli
+MinimumVersion: '2.3'
+ParentRecipe: com.github.humanendpoint.download.hub-cli
+
+Input:
+  NAME: hub-cli
+
+Process:
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs:
+        usr: '0755'
+        usr/local: '0755'
+        usr/local/bin: '0755'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+
+  - Processor: PkgRootCreator
+    Arguments:
+      pkgdirs: {}
+      pkgroot: "%RECIPE_CACHE_DIR%/scripts"
+
+  - Processor: Unarchiver
+    Arguments:
+      destination_path: '%RECIPE_CACHE_DIR%'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/hub-darwin-amd64-%version%/bin/hub'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/usr/local/bin/hub'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/hub-darwin-amd64-%version%/share'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/usr/local/share'
+
+  - Processor: Copier
+    Arguments:
+      source_path: '%RECIPE_CACHE_DIR%/hub-darwin-amd64-%version%/etc'
+      destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%version%/usr/local/etc/hub_completions'
+
+  - Processor: FileCreator
+    Arguments:
+      file_path: '%RECIPE_CACHE_DIR%/scripts/postinstall'
+      file_content: |
+        #!/usr/bin/env bash
+
+        assigned_user="$(stat -f %Su /dev/console)"
+        uid=$(id -u "$assigned_user")
+        echo >&2 "Installing hub shell completions..."
+
+        # Check if the user shell is Zsh
+        if dscl . -read /Users/"$assigned_user" UserShell | sed 's/UserShell: //g' | grep -q zsh; then
+            echo >&2 "Zsh shell detected, installing completions..."
+
+            # Create Zsh completions directory if it doesn't exist
+            if [ ! -d /Users/"$assigned_user"/.zsh/completions ]; then
+                mkdir -p /Users/"$assigned_user"/.zsh/completions
+            fi
+
+            # Copy Zsh completion file
+            cp -r /usr/local/etc/hub_completions/hub.zsh_completion /Users/"$assigned_user"/.zsh/completions/_hub
+            chown -R "$assigned_user" /Users/"$assigned_user"/.zsh/
+
+            # Append to .zshrc, ensuring proper permissions and quoting
+            launchctl asuser "$uid" sudo -iu "$assigned_user" bash -c "cat <<'EOF' >> /Users/$assigned_user/.zshrc
+        fpath=(~/.zsh/completions \$fpath)
+        autoload -U compinit && compinit
+        EOF
+        "
+        else
+            echo >&2 "Zsh shell not detected, moving to bash..."
+
+            # Only append to .bash_profile if it exists
+            if [ -f /Users/"$assigned_user"/.bash_profile ]; then
+                cat <<'EOF' >> /Users/"$assigned_user"/.bash_profile
+        if [ -f /usr/local/etc/hub.bash_completion ]; then
+            . /usr/local/etc/hub.bash_completion
+        fi
+        EOF
+            else
+                echo >&2 ".bash_profile not found, skipping bash completion installation."
+            fi
+        fi
+      file_mode: "0755"
+
+  - Processor: PkgCreator
+    Arguments:
+      pkg_request:
+        pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%version%'
+        chown:
+        - group: staff
+          path: usr
+          user: root
+        - group: staff
+          path: usr/local
+          user: root
+        - group: staff
+          path: usr/local/bin
+          user: root
+        id: com.github.hub-cli
+        version: '%version%'
+        pkgname: 'hub-cli-%version%'
+        options: purge_ds_store
+        scripts: scripts
