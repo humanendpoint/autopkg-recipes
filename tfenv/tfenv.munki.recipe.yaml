@@ -1,0 +1,24 @@
+Description: Downloads the current release version of tfenv and imports into Munki.
+Identifier: com.github.catawiki.munki.tfenv
+ParentRecipe: com.github.humanendpoint.pkg.tfenv
+MinimumVersion: 0.2.0
+
+Input:
+  NAME: tfenv
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  MUNKI_CATEGORY: Development
+  pkginfo:
+    catalogs:
+    - testing
+    category: '%MUNKI_CATEGORY%'
+    description: Terraform version manager inspired by rbenv.
+    developer: Shinichi Ishimura
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pkg_path%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

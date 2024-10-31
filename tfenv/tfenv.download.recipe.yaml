@@ -1,0 +1,29 @@
+Description: Downloads the latest version of tfenv.
+Identifier: com.github.humanendpoint.download.tfenv
+MinimumVersion: '2.3'
+
+Input:
+  NAME: tfenv
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    re_pattern: v\d*\.\d*\.\d*
+    url: https://github.com/tfutils/tfenv/tags
+
+- Processor: com.github.grahampugh.recipes.commonprocessors/StringReplacer
+  Arguments:
+    input_string: '%match%'
+    replacement_string: ''
+    string_to_replace: v
+
+- Processor: URLDownloaderPython
+  Arguments:
+    url: https://github.com/tfutils/tfenv/archive/refs/tags/v%output_string%.zip
+
+- Processor: FileMover
+  Arguments:
+    source: '%pathname%'
+    target: '%RECIPE_CACHE_DIR%/downloads/tfenv-v%output_string%.zip'
+
+- Processor: EndOfCheckPhase

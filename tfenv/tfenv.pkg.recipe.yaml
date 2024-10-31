@@ -1,0 +1,50 @@
+Description: Builds a package that installs tfenv.
+Identifier: com.github.humanendpoint.pkg.tfenv
+ParentRecipe: com.github.humanendpoint.download.tfenv
+MinimumVersion: '2.3'
+
+Input:
+  NAME: tfenv
+  PKG_ID: com.github.humanendpoint.pkg.tfenv
+
+Process:
+- Processor: FileFinder
+  Arguments:
+    pattern: '%RECIPE_CACHE_DIR%/downloads/*.zip'
+
+- Processor: Unarchiver
+  Arguments:
+    archive_path: '%found_filename%'
+    destination_path: '%RECIPE_CACHE_DIR%/unpacked'
+    purge_destination: true
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%/%NAME%-%match%/payload/usr/local/bin/tfenv'
+    overwrite: true
+    source_path: '%RECIPE_CACHE_DIR%/unpacked/%NAME%-%output_string%'
+
+- Processor: PkgRootCreator
+  Arguments:
+    pkgdirs:
+      payload: '0755'
+      payload/usr: '0755'
+      payload/usr/local: '0755'
+      payload/usr/local/bin: '0755'
+      payload/usr/local/bin/tfenv: '0755'
+    pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%output_string%'
+
+- Processor: PkgCreator
+  Arguments:
+    pkg_request:
+      chown:
+      - group: wheel
+        mode: '0755'
+        path: usr/local/bin
+        user: root
+      id: '%PKG_ID%'
+      options: purge_ds_store
+      pkgdir: '%RECIPE_CACHE_DIR%'
+      pkgname: '%NAME%-%output_string%'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%-%match%/payload'
+      version: '%output_string%'

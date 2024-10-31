@@ -1,0 +1,12 @@
+Description: Signs a provided installer package using a signing certificate identifier.
+Identifier: com.github.humanendpoint.sign.tfenv
+ParentRecipe: com.github.humanendpoint.pkg.tfenv
+
+Input:
+  SIGNINGCERTIFICATE: ''
+
+Process:
+- Processor: com.github.rtrouton.SharedProcessors/PkgSigner
+  Arguments:
+    pkg_path: '%found_filename%'
+    signing_cert: '%SIGNINGCERTIFICATE%'
