@@ -37,8 +37,10 @@ Input:
     preinstall_script: |
       #!/bin/bash
       exitCode=0
-
-      jq="/usr/local/bin/jq"
+      
+      # we attempt to find jq installed. jq exists in /usr/bin on 15+. 
+      # Sometimes users have it installed via homebrew aswell, or standalone.
+      jq=$(which jq)
 
       # Get the currently logged-in user and go ahead if not root
       CURRENT_USER=$(/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }')
