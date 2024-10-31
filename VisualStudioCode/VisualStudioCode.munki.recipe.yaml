@@ -114,7 +114,7 @@ Input:
       #!/bin/bash
       CURRENT_USER=$(/bin/ls -l /dev/console | /usr/bin/awk '{ print $3 }')
       USER_HOME=$(/usr/bin/dscl . -read "/Users/$CURRENT_USER" NFSHomeDirectory | /usr/bin/sed 's/^[^\\/]*//g')
-      rm -rf "$USER_HOME"/Library/Application\\ Support/Code"
+      rm -rf "$USER_HOME"/Library/Application\ Support/Code"
     unattended_install: true
 
 Process:
