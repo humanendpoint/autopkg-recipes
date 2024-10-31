@@ -1,5 +1,5 @@
 Description: Downloads the current release version of tfenv and imports into Munki.
-Identifier: com.github.catawiki.munki.tfenv
+Identifier: com.github.humanendpoint.munki.tfenv
 ParentRecipe: com.github.humanendpoint.pkg.tfenv
 MinimumVersion: 0.2.0
 
