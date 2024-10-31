@@ -1,0 +1,27 @@
+Description: Downloads the latest version of Lectricus (GUI) and imports it into Munki.
+Identifier: com.github.humanendpoint.munki.Lectricus(GUI)
+ParentRecipe: com.github.humanendpoint.download.Lectricus(GUI)
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Lectricus (GUI)
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  pkginfo:
+    catalogs:
+    - testing
+    description: Programmatic Electron fuse detection
+    developer: RIPEDA Consulting Corporation
+    display_name: Lectricus (GUI)
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+- Processor: DmgCreator
+  Arguments:
+    dmg_path: '%RECIPE_CACHE_DIR%/%NAME%.dmg'
+    dmg_root: '%RECIPE_CACHE_DIR%/%NAME%'
+
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%dmg_path%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

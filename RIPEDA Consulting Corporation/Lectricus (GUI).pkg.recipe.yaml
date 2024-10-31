@@ -1,0 +1,12 @@
+Description: Downloads the latest version of Lectricus (GUI) and creates a package.
+Identifier: com.github.humanendpoint.pkg.Lectricus(GUI)
+ParentRecipe: com.github.humanendpoint.download.Lectricus(GUI)
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Lectricus (GUI)
+
+Process:
+- Processor: AppPkgCreator
+  Arguments:
+    app_path: '%RECIPE_CACHE_DIR%/%NAME%/Lectricus (GUI).app'
