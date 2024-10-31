@@ -26,13 +26,17 @@ Process:
     file_content: |
       #!/bin/bash
       working_dir=$(/usr/bin/dirname "${0}")
-
       python3_versions=($(which -a python3 python3.11))
+      brew=$(which brew)
       for version in "${python3_versions[@]}"
       do
-          $python3_versions -m pip install "${working_dir}/%filename%"
+          if [ -n $brew ]; then
+              $python3_versions -m pip install "${working_dir}/%filename%" --break-system-packages
+          else
+              $python3_versions -m pip install "${working_dir}/%filename%"
+          fi
       done
-      exit 0"
+      exit 0
     file_mode: '0755'
     file_path: '%RECIPE_CACHE_DIR%/%NAME%/scripts/postinstall'
 
