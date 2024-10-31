@@ -36,6 +36,9 @@ Input:
       chown -R $USER:$console_user_group "${APPLICATION_PATH}""
     preinstall_script: |
       #!/bin/bash
+
+      # This preinstall script essentially turns vscode into vscodium, removing all telemetry.
+      
       exitCode=0
       
       # we attempt to find jq installed. jq exists in /usr/bin on 15+. 
