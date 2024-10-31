@@ -1,0 +1,24 @@
+Description: Generic recipe to download Python package and import it into Munki.
+Identifier: com.github.humanendpoint.munki.Python-package
+ParentRecipe: com.github.humanendpoint.pkg.Python-package
+MinimumVersion: 0.4.0
+
+Input:
+  NAME: Python-package
+  MUNKI_REPO_SUBDIR: apps/Python
+  MUNKI_CATEGORY: Python
+  PYTHON_PKG_NAME: pypackage
+  pkginfo:
+    catalogs:
+    - testing
+    category: '%MUNKI_CATEGORY%'
+    description: '%PYTHON_PKG_NAME% is a Python package.'
+    display_name: '%NAME%'
+    name: '%NAME%'
+    unattended_install: true
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pkg_path%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

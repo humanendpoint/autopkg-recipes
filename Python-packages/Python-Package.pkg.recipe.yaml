@@ -1,0 +1,52 @@
+Description: Generic recipe to create an installer for a Python package.
+Identifier: com.github.humanendpoint.pkg.Python-package
+ParentRecipe: com.github.gerardkok.download.Python-package
+MinimumVersion: 0.4.0
+
+Input:
+  NAME: Python-package
+  PYTHON_PKG_NAME: pypackage
+
+Process:
+- Processor: PkgRootCreator
+  Arguments:
+    pkgdirs:
+      payload: '0755'
+      scripts: '0755'
+    pkgroot: '%RECIPE_CACHE_DIR%/%NAME%'
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%RECIPE_CACHE_DIR%/%NAME%/scripts/%filename%'
+    purge_destination: true
+    source_path: '%pathname%'
+
+- Processor: FileCreator
+  Arguments:
+    file_content: |
+      #!/bin/bash
+      working_dir=$(/usr/bin/dirname "${0}")
+
+      python3_versions=($(which -a python3 python3.11))
+      for version in "${python3_versions[@]}"
+      do
+          $python3_versions -m pip install "${working_dir}/%filename%"
+      done
+      exit 0"
+    file_mode: '0755'
+    file_path: '%RECIPE_CACHE_DIR%/%NAME%/scripts/postinstall'
+
+- Processor: PkgCreator
+  Arguments:
+    pkg_request:
+      id: com.github.%NAME%
+      options: purge_ds_store
+      pkgname: '%PYTHON_PKG_NAME%'
+      pkgroot: '%RECIPE_CACHE_DIR%/%NAME%/payload'
+      scripts: '%RECIPE_CACHE_DIR%/%NAME%/scripts'
+      version: '%version%'
+
+- Processor: PathDeleter
+  Arguments:
+    path_list:
+    - '%RECIPE_CACHE_DIR%/%NAME%'
