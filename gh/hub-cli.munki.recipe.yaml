@@ -1,9 +1,9 @@
 Description: Downloads the current release version of hub CLI and imports into Munki.
-Identifier: com.github.humanendpoint.munki.hub-cli
-ParentRecipe: com.github.humanendpoint.pkg.hub-cli
+Identifier: com.github.humanendpoint.munki.hub
+ParentRecipe: com.github.humanendpoint.pkg.hub
 
 Input:
-  NAME: hub-cli
+  NAME: hub
   MUNKI_REPO_SUBDIR: apps/GitHub
   INPUT_DESCRIPTION: |
       <a target='new' href='https://github.com/mislav/hub'>hub CLI</a> is a command-line tool that makes git easier to use with GitHub.<br>
@@ -28,16 +28,13 @@ Input:
     uninstall_script: |
       #!/usr/bin/env bash
 
-      assigned_user="$(stat -f %Su /dev/console)"
-      user_zsh_completions_dir="/Users/$assigned_user/.zsh/completions"
-
       echo "Uninstalling hub-cli..."
 
       # Define paths to remove
       paths_to_remove=(
           "/usr/local/bin/hub"
           "/usr/local/share/doc/hub-doc"
-          "$user_zsh_completions_dir/_hub"
+          "/etc/.zsh/completions"
           "/usr/local/etc/hub.zsh_completion"
           "/usr/local/etc/hub.bash_completion"
           "/usr/local/share/vim/vimfiles/ftdetect/pullrequest.vim"
@@ -60,7 +57,7 @@ Input:
       fi
 
       # Forget the package using pkgutil
-      pkgutil --forget com.github.hub-cli
+      pkgutil --forget com.github.hub
 
       echo "hub-cli has been successfully uninstalled."
 

@@ -1,10 +1,10 @@
 Description: Packages the latest version of gh cli.
-Identifier: com.github.humanendpoint.pkg.gh-cli
+Identifier: com.github.humanendpoint.pkg.gh
 MinimumVersion: '2.3'
-ParentRecipe: com.github.humanendpoint.download.gh-cli
+ParentRecipe: com.github.humanendpoint.download.gh
 
 Input:
-  NAME: gh-cli
+  NAME: gh
 
 Process:
   - Processor: PkgRootCreator
@@ -40,10 +40,7 @@ Process:
         - group: staff
           path: usr/local
           user: root
-        - group: staff
-          path: usr/local/bin
-          user: root
-        id: com.github.gh-cli
+        id: com.github.gh
         version: '%version%'
-        pkgname: 'gh-cli-%version%'
+        pkgname: '%NAME%-%version%'
         options: purge_ds_store

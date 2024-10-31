@@ -1,6 +1,6 @@
 Description: Signs a provided installer package using a signing certificate identifier.
-Identifier: com.github.humanendpoint.sign.gh-cli
-ParentRecipe: com.github.humanendpoint.pkg.gh-cli
+Identifier: com.github.humanendpoint.sign.gh
+ParentRecipe: com.github.humanendpoint.pkg.gh
 
 Input:
   SIGNINGCERTIFICATE: ''

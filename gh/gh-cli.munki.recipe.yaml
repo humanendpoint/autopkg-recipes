@@ -1,9 +1,9 @@
 Description: Downloads the current release version of gh CLI and imports into Munki.
-Identifier: com.github.humanendpoint.munki.gh-cli
-ParentRecipe: com.github.humanendpoint.pkg.gh-cli
+Identifier: com.github.humanendpoint.munki.gh
+ParentRecipe: com.github.humanendpoint.pkg.gh
 
 Input:
-  NAME: gh-cli
+  NAME: gh
   MUNKI_REPO_SUBDIR: apps/GitHub
   INPUT_DESCRIPTION: |
       <a target='new' href='https://cli.github.com'>gh CLI</a> is GitHub's official command line tool.<br>
@@ -27,9 +27,6 @@ Input:
     uninstall_script: |
       #!/usr/bin/env bash
 
-      assigned_user="$(stat -f %Su /dev/console)"
-      user_zsh_completions_dir="/Users/$assigned_user/.zsh/completions"
-
       echo "Uninstalling hub-cli..."
       rm -f /usr/local/bin/gh
 
@@ -39,6 +36,8 @@ Input:
           find "$man_dir" -name "gh-*" -exec rm -f {} \;
           echo "Removed hub-related man pages from $man_dir"
       fi
+
+      pkgutil --forget com.github.gh
 
 Process:
 - Processor: MunkiInstallsItemsCreator
